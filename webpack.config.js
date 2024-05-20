@@ -26,9 +26,6 @@ const config = {
       template: path.resolve(__dirname, "./src/index.html"),
       scriptLoading: "defer",
     }),
-    new MiniCssExtractPlugin({
-      filename: "style.css",
-    }),
 
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
@@ -59,6 +56,7 @@ module.exports = () => {
     config.mode = "production";
 
     config.plugins.push(new MiniCssExtractPlugin());
+    delete config.devtool;
   } else {
     config.mode = "development";
   }
