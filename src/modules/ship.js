@@ -1,4 +1,4 @@
-const ship = function (shipLength, orientation = 1) {
+const createShip = function (shipLength, orientation = 1) {
   // Orientation 1:up, 2:right, 3:down, 4:left
   if (orientation < 1 || orientation > 4 || typeof orientation !== "number") {
     throw new Error("InputError: Invalid orientation");
@@ -20,4 +20,4 @@ const ship = function (shipLength, orientation = 1) {
   }
 };
 
-export { ship };
+export { createShip };
