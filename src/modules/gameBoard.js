@@ -40,9 +40,25 @@ const createBoard = function (boardSize = 10) {
     const ship = createShip(shipLength);
 
     for (let i = 0; i < ship.length; i++) {
-      board[Math.round(coordinates[0])][
-        Math.round(coordinates[1] + i)
-      ].occupant = ship;
+      if (orientation === 1) {
+        board[Math.round(coordinates[0])][
+          Math.round(coordinates[1] + i)
+        ].occupant = ship;
+      } else if (orientation === 2) {
+        board[Math.round(coordinates[0] + i)][
+          Math.round(coordinates[1])
+        ].occupant = ship;
+      } else if (orientation === 3) {
+        board[Math.round(coordinates[0])][
+          Math.round(coordinates[1] - i)
+        ].occupant = ship;
+      } else if (orientation === 4) {
+        board[Math.round(coordinates[0] - i)][
+          Math.round(coordinates[1])
+        ].occupant = ship;
+      } else {
+        throw new Error("InputError: Invalid orientation");
+      }
     }
   };
 

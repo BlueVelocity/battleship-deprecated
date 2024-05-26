@@ -20,6 +20,42 @@ test("place() places ship at specified coordinates", () => {
   });
 });
 
+test("place() allows ship rotation", () => {
+  //1=up, 2=right, 3=down, 4=left
+  const testCases = [1, 2, 3, 4];
+
+  const originCoords = [5, 5];
+  const shipLength = 5;
+  const lengthOffset = shipLength - 1;
+
+  testCases.forEach((orientation, index) => {
+    const testBoard = createBoard(10);
+    testBoard.place(shipLength, originCoords, orientation);
+
+    if (index === 0) {
+      expect(
+        testBoard.board[originCoords[0]][originCoords[1] + lengthOffset]
+          .occupant,
+      ).toBeTruthy();
+    } else if (index === 1) {
+      expect(
+        testBoard.board[originCoords[0] + lengthOffset][originCoords[1]]
+          .occupant,
+      ).toBeTruthy();
+    } else if (index === 2) {
+      expect(
+        testBoard.board[originCoords[0]][originCoords[1] - lengthOffset]
+          .occupant,
+      ).toBeTruthy();
+    } else {
+      expect(
+        testBoard.board[originCoords[0] - lengthOffset][originCoords[1]]
+          .occupant,
+      ).toBeTruthy();
+    }
+  });
+});
+
 test("place() throws error if passed invalid coordinate data type", () => {
   const testCases = [undefined, null, "string", {}];
 
