@@ -32,28 +32,26 @@ test("place() allows ship rotation", () => {
     const testBoard = createBoard(10);
     testBoard.place(shipLength, originCoords, orientation);
 
+    const x = originCoords[0];
+    const y = originCoords[1];
+
     if (index === 0) {
-      expect(
-        testBoard.board[originCoords[0]][originCoords[1] + lengthOffset]
-          .occupant,
-      ).toBeTruthy();
+      expect(testBoard.board[x][y + lengthOffset].occupant).toBeTruthy();
     } else if (index === 1) {
-      expect(
-        testBoard.board[originCoords[0] + lengthOffset][originCoords[1]]
-          .occupant,
-      ).toBeTruthy();
+      expect(testBoard.board[x + lengthOffset][y].occupant).toBeTruthy();
     } else if (index === 2) {
-      expect(
-        testBoard.board[originCoords[0]][originCoords[1] - lengthOffset]
-          .occupant,
-      ).toBeTruthy();
+      expect(testBoard.board[x][y - lengthOffset].occupant).toBeTruthy();
     } else {
-      expect(
-        testBoard.board[originCoords[0] - lengthOffset][originCoords[1]]
-          .occupant,
-      ).toBeTruthy();
+      expect(testBoard.board[x - lengthOffset][y].occupant).toBeTruthy();
     }
   });
+});
+
+test("place() adds ship to board roster", () => {
+  const testBoard = createBoard();
+  testBoard.place(5, [5, 5]);
+
+  expect(testBoard.roster).toHaveLength(1);
 });
 
 test("place() throws error if passed invalid coordinate data type", () => {
@@ -67,16 +65,21 @@ test("place() throws error if passed invalid coordinate data type", () => {
 });
 
 test("place() throws error if coordinates are outside of range", () => {
-  const boardSize = 10;
+  const testBoard = createBoard(10);
   const testCases = [
-    [-1, -1],
-    [-1, 0],
-    [11, 11],
-    [0, 11],
+    [1, [-1, -1]],
+    [1, [-1, 0]],
+    [1, [11, 11]],
+    [1, [0, 11]],
+    [5, [9, 9]],
+    [5, [9, 9], 2],
+    [5, [0, 0], 3],
+    [5, [0, 0], 4],
   ];
 
-  testCases.forEach((coordinates) => {
-    expect(() => createBoard(boardSize).place(1, coordinates)).toThrow(
+  testCases.forEach((testCase) => {
+    const [length, coordinates, orientation] = testCase;
+    expect(() => testBoard.place(length, coordinates, orientation)).toThrow(
       "InputError: Coordinates outside range",
     );
   });
@@ -108,4 +111,19 @@ test("place() accepts decimal", () => {
     testBoard.place(1, [coordinates[0], 0]);
     expect(testBoard.board[coordinates[1]][0].occupant).toBeTruthy();
   });
+});
+
+test("receiveAttack() hits ship if present", () => {
+  const testBoard = createBoard();
+  testBoard.place(1, [5, 5]);
+  testBoard.receiveAttack([5, 5]);
+
+  expect(testBoard.board[5][5].occupant.hits).toBe(1);
+});
+
+test("receiveAttack() records missed ship", () => {
+  const testBoard = createBoard();
+  testBoard.receiveAttack([5, 5]);
+
+  expect(testBoard.missed).toHaveLength(1);
 });

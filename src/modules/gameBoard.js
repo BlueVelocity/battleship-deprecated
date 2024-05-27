@@ -19,6 +19,8 @@ const createBoard = function (boardSize = 10) {
     return tempBoard;
   })();
 
+  const roster = [];
+
   const place = function (shipLength, coordinates, orientation = 1) {
     if (!Array.isArray(coordinates))
       throw new Error("InputError: Invalid coordinate data type");
@@ -29,36 +31,62 @@ const createBoard = function (boardSize = 10) {
     )
       throw new Error("InputError: Coordinates contain invalid data type");
 
-    if (
-      coordinates[0] < 0 ||
-      coordinates[0] > boardSize ||
-      coordinates[1] < 0 ||
-      coordinates[1] > boardSize
-    )
-      throw new Error("InputError: Coordinates outside range");
+    function checkValidCoord(coord) {
+      if (
+        coord[0] < 0 ||
+        coord[0] > boardSize ||
+        coord[1] < 0 ||
+        coord[1] > boardSize
+      )
+        throw new Error("InputError: Coordinates outside range");
+    }
+
+    checkValidCoord(coordinates);
+
+    const x = Math.round(coordinates[0]);
+    const y = Math.round(coordinates[1]);
+
+    const positions = (function () {
+      const calcedPositions = [];
+
+      for (let i = 0; i < shipLength; i++) {
+        if (orientation === 1) {
+          calcedPositions.push([x, y + i]);
+        } else if (orientation === 2) {
+          calcedPositions.push([x + i, y]);
+        } else if (orientation === 3) {
+          calcedPositions.push([x, y - i]);
+        } else if (orientation === 4) {
+          calcedPositions.push([x - i, y]);
+        } else {
+          throw new Error("InputError: Invalid orientation");
+        }
+      }
+
+      calcedPositions.forEach((coordinate) => {
+        checkValidCoord(coordinate);
+      });
+
+      return calcedPositions;
+    })();
 
     const ship = createShip(shipLength);
 
-    for (let i = 0; i < ship.length; i++) {
-      if (orientation === 1) {
-        board[Math.round(coordinates[0])][
-          Math.round(coordinates[1] + i)
-        ].occupant = ship;
-      } else if (orientation === 2) {
-        board[Math.round(coordinates[0] + i)][
-          Math.round(coordinates[1])
-        ].occupant = ship;
-      } else if (orientation === 3) {
-        board[Math.round(coordinates[0])][
-          Math.round(coordinates[1] - i)
-        ].occupant = ship;
-      } else if (orientation === 4) {
-        board[Math.round(coordinates[0] - i)][
-          Math.round(coordinates[1])
-        ].occupant = ship;
-      } else {
-        throw new Error("InputError: Invalid orientation");
-      }
+    roster.push(ship);
+
+    positions.forEach((coordinates) => {
+      board[coordinates[0]][coordinates[1]].occupant = ship;
+    });
+  };
+
+  const missed = [];
+
+  const receiveAttack = function (coordinates) {
+    const targetTile = board[coordinates[0]][coordinates[1]];
+    if (!targetTile.occupant) {
+      missed.push(coordinates);
+    } else {
+      targetTile.occupant.hit();
     }
   };
 
@@ -66,7 +94,14 @@ const createBoard = function (boardSize = 10) {
     get board() {
       return board;
     },
+    get roster() {
+      return roster;
+    },
     place,
+    receiveAttack,
+    get missed() {
+      return missed;
+    },
   };
 };
 
