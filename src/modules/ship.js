@@ -20,6 +20,9 @@ const createShip = function (length) {
   return {
     length,
     hit,
+    get hits() {
+      return hits;
+    },
     isSunk,
   };
 };
