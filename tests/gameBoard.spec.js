@@ -1,5 +1,11 @@
 import { createBoard } from "../src/modules/gameBoard.js";
 
+let testBoard = createBoard(10);
+
+beforeEach(() => {
+  testBoard = createBoard(10);
+});
+
 test("returns board with grid", () => {
   expect(createBoard().board[0][0]).toBeDefined();
 });
@@ -9,7 +15,6 @@ test("place() places ship at specified coordinates", () => {
   const originCoords = [5, 5];
 
   testCases.forEach((length) => {
-    const testBoard = createBoard(10);
     testBoard.place(length, originCoords);
 
     for (let i = 0; i < length; i++) {
@@ -29,7 +34,6 @@ test("place() allows ship rotation", () => {
   const lengthOffset = shipLength - 1;
 
   testCases.forEach((orientation, index) => {
-    const testBoard = createBoard(10);
     testBoard.place(shipLength, originCoords, orientation);
 
     const x = originCoords[0];
@@ -48,7 +52,6 @@ test("place() allows ship rotation", () => {
 });
 
 test("place() adds ship to board roster", () => {
-  const testBoard = createBoard();
   testBoard.place(5, [5, 5]);
 
   expect(testBoard.roster).toHaveLength(1);
@@ -65,7 +68,6 @@ test("place() throws error if passed invalid coordinate data type", () => {
 });
 
 test("place() throws error if coordinates are outside of range", () => {
-  const testBoard = createBoard(10);
   const testCases = [
     [1, [-1, -1]],
     [1, [-1, 0]],
@@ -107,14 +109,12 @@ test("place() accepts decimal", () => {
   ];
 
   testCases.forEach((coordinates) => {
-    const testBoard = createBoard();
     testBoard.place(1, [coordinates[0], 0]);
     expect(testBoard.board[coordinates[1]][0].occupant).toBeTruthy();
   });
 });
 
 test("receiveAttack() hits ship if present", () => {
-  const testBoard = createBoard();
   testBoard.place(1, [5, 5]);
   testBoard.receiveAttack([5, 5]);
 
@@ -122,7 +122,6 @@ test("receiveAttack() hits ship if present", () => {
 });
 
 test("receiveAttack() records missed ship", () => {
-  const testBoard = createBoard();
   testBoard.receiveAttack([5, 5]);
 
   expect(testBoard.missed).toHaveLength(1);
