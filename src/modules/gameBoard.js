@@ -90,6 +90,16 @@ const createBoard = function (boardSize = 10) {
     }
   };
 
+  const reportLoss = function () {
+    let allSunk = true;
+    roster.forEach((ship) => {
+      if (ship.isSunk() === false) {
+        allSunk = false;
+      }
+    });
+    return allSunk;
+  };
+
   return {
     get board() {
       return board;
@@ -102,6 +112,7 @@ const createBoard = function (boardSize = 10) {
     get missed() {
       return missed;
     },
+    reportLoss,
   };
 };
 
