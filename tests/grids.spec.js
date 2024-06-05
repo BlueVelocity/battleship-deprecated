@@ -1,14 +1,8 @@
 import { createGrids } from "../src/components/grids.js";
 
-test("returns an array dom object", () => {
+test("returns an array containing two dom objects", () => {
   expect(Array.isArray(createGrids().grids)).toBe(true);
-});
-
-test("array contains only two items", () => {
   expect(createGrids().grids.length === 2).toBe(true);
-});
-
-test("array contains two Element objects", () => {
   expect(createGrids().grids[0] instanceof Element).toBe(true);
   expect(createGrids().grids[1] instanceof Element).toBe(true);
 });
@@ -35,36 +29,29 @@ test("grids accepts name change", () => {
 
 test("grids have x rows of x columns", () => {
   const proposedGridSize = 5;
-  expect(
-    createGrids({ gridSize: proposedGridSize }).grids[0].childElementCount ===
-      proposedGridSize,
-  ).toBe(true);
-  expect(
-    createGrids({ gridSize: proposedGridSize }).grids[0].childNodes[0]
-      .childElementCount === proposedGridSize,
-  ).toBe(true);
-  expect(
-    createGrids({ gridSize: proposedGridSize }).grids[1].childElementCount ===
-      proposedGridSize,
-  ).toBe(true);
-  expect(
-    createGrids({ gridSize: proposedGridSize }).grids[1].childNodes[0]
-      .childElementCount === proposedGridSize,
-  ).toBe(true);
+
+  for (let i = 0; i < 2; i++) {
+    expect(
+      createGrids({ gridSize: proposedGridSize }).grids[i].childElementCount ===
+        proposedGridSize,
+    ).toBe(true);
+    expect(
+      createGrids({ gridSize: proposedGridSize }).grids[i].childNodes[0]
+        .childElementCount === proposedGridSize,
+    ).toBe(true);
+  }
 });
 
 test("grids default to 10 rows by 10 columns", () => {
-  expect(createGrids().grids[0].childElementCount === 10).toBe(true);
-  expect(createGrids().grids[0].childNodes[0].childElementCount === 10).toBe(
-    true,
-  );
-  expect(createGrids().grids[1].childElementCount === 10).toBe(true);
-  expect(createGrids().grids[1].childNodes[0].childElementCount === 10).toBe(
-    true,
-  );
+  for (let i = 0; i < 2; i++) {
+    expect(createGrids().grids[i].childElementCount === 10).toBe(true);
+    expect(createGrids().grids[i].childNodes[0].childElementCount === 10).toBe(
+      true,
+    );
+  }
 });
 
-test("grid tiles contain coordinates as id", () => {
+test("grid tiles contain coordinates as id, format [name]_[x][y]", () => {
   const playerOneName = "Player1";
   const gridElement = createGrids({
     playerOneName,
