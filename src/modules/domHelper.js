@@ -1,5 +1,14 @@
-const domHelper = function () {
-  return {};
-};
+export default {
+  getId: function (id) {
+    return document.getElementById(id);
+  },
 
-export { domHelper };
+  getInputValue: function (id) {
+    return document.getElementById(id).value;
+  },
+
+  hideById: function (id) {
+    const element = this.getId(id);
+    element.classList.add("hidden");
+  },
+};

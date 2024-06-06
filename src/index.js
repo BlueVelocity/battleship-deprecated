@@ -1,11 +1,8 @@
 import "./style.css";
-import { createHeader } from "./components/titleBlock.js";
-import { createGrids } from "./components/grids.js";
+import "./modules/driver.js";
+import domHelper from "./modules/domHelper.js";
 
 const body = document.querySelector("body");
-
-//const playerBoards = createGrids(10);
-//body.appendChild(grid.component);
 
 const temp = document.createElement("p");
 temp.textContent = "Placed using javascript";
