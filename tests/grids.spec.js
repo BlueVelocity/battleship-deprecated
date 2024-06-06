@@ -51,7 +51,7 @@ test("grids default to 10 rows by 10 columns", () => {
   }
 });
 
-test("grid tiles contain coordinates as id, format [name]_[x][y]", () => {
+test("grid tiles contain coordinates as id, format [name]-[x].[y]", () => {
   const playerOneName = "Player1";
   const gridElement = createGrids({
     playerOneName,
@@ -68,7 +68,11 @@ test("grid tiles contain coordinates as id, format [name]_[x][y]", () => {
         `${testCase[1]}`
       ].id,
     ).toBe(
-      playerOneName + "_" + testCase[0].toString() + testCase[1].toString(),
+      playerOneName +
+        "-" +
+        testCase[0].toString() +
+        "." +
+        testCase[1].toString(),
     );
   });
 });

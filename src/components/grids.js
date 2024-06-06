@@ -15,7 +15,7 @@ const createGrids = function ({
 
       for (let y = 0; y < gridSize; y++) {
         const tile = document.createElement("div");
-        tile.id = playerName + "_" + x.toString() + y.toString();
+        tile.id = playerName + "-" + x.toString() + "." + y.toString();
         row.appendChild(tile);
       }
 
