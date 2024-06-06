@@ -9,11 +9,11 @@ const createGrids = function ({
   const grids = [playerOne, playerTwo].map((playerName) => {
     const grid = document.createElement("div");
     grid.id = playerName;
-    grid.classList = "grid-item flex flex-col aspect-square w-full bg-blue-500";
+    grid.classList = "flex flex-col aspect-square bg-blue-500";
 
     for (let x = 0; x < gridSize; x++) {
       const row = document.createElement("div");
-      row.classList = "flex flex-row flex-auto border-black";
+      row.classList = "flex flex-auto";
 
       for (let y = 0; y < gridSize; y++) {
         const tile = document.createElement("div");

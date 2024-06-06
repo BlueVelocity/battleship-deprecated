@@ -5,5 +5,5 @@ import domHelper from "./modules/domHelper.js";
 const body = document.querySelector("body");
 
 const temp = document.createElement("p");
-temp.textContent = "Placed using javascript";
+temp.textContent = "This text placed using javascript";
 body.appendChild(temp);
