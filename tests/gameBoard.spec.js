@@ -127,6 +127,14 @@ test("receiveAttack() records missed ship", () => {
   expect(testBoard.missed).toHaveLength(1);
 });
 
+test("receiveAttack() returns true if hit and false if miss", () => {
+  testBoard.place(1, [5, 5]);
+  testBoard.receiveAttack([5, 5]);
+
+  expect(testBoard.receiveAttack([5, 5])).toBe(true);
+  expect(testBoard.receiveAttack([5, 6])).toBe(false);
+});
+
 test("remainingShips() reports if all ships are sunk", () => {
   testBoard.place(1, [5, 5]);
   expect(testBoard.remainingShips()).toEqual({ remaining: 1, total: 1 });

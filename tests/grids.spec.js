@@ -16,8 +16,8 @@ test("grids accepts name change", () => {
   const testCases = [["1", "2"], ["1"], [, "2"]];
 
   testCases.forEach((testCase) => {
-    const answerOne = testCase[0] === undefined ? "" : testCase[0];
-    const answerTwo = testCase[1] === undefined ? "" : testCase[1];
+    const answerOne = testCase[0] === undefined ? "Player1" : testCase[0];
+    const answerTwo = testCase[1] === undefined ? "Player2" : testCase[1];
     const gridElement = createGrids({
       playerOneName: answerOne,
       playerTwoName: answerTwo,

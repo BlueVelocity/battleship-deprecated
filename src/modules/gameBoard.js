@@ -85,8 +85,10 @@ const createBoard = function (boardSize = 10) {
     const targetTile = board[coordinates[0]][coordinates[1]];
     if (!targetTile.occupant) {
       missed.push(coordinates);
+      return false;
     } else {
       targetTile.occupant.hit();
+      return true;
     }
   };
 
