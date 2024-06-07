@@ -1,9 +1,9 @@
-import { createPlayer } from "./player.js";
 import domHelper from "./domHelper.js";
-import { createGrids } from "../components/grids.js";
+import createPlayer from "./player.js";
+import createBoard from "../components/grids.js";
 
 const getId = domHelper.getId;
-const newInterElement = domHelper.createInteractiveElement;
+const interElement = domHelper.createInteractiveElement;
 
 const gameState = {
   playerOne: undefined,
@@ -20,10 +20,10 @@ const gameState = {
 };
 
 const domElements = {
-  gameBoard: newInterElement(getId("game-area")),
-  startForm: newInterElement(getId("start-form")),
-  playerOneInput: newInterElement(getId("input-player-1")),
-  playerTwoInput: newInterElement(getId("input-player-2")),
+  gameBoard: interElement(getId("game-area")),
+  startForm: interElement(getId("start-form")),
+  playerOneInput: interElement(getId("input-player-1")),
+  playerTwoInput: interElement(getId("input-player-2")),
   playerOneBoard: undefined,
   playerTwoBoard: undefined,
 };
@@ -44,49 +44,46 @@ const getPlayerNames = function () {
   return { playerOne, playerTwo };
 };
 
-const tileClick = function (tile) {
-  const targetTile = gameState.currentPlayer.gameBoard.board[tile.x][tile.y];
-  if (
-    tile.name === gameState.notCurrentPlayer.name &&
-    targetTile.isVisited === false
-  ) {
-    targetTile.isVisited = true;
+const createPlayerLink = function (name, gridSize, isComputer) {
+  const playerBoard = createPlayer(name, isComputer);
+  const playerDomBoard = createBoard({ name, gridSize });
 
-    const hit = gameState.notCurrentPlayer.gameBoard.receiveAttack([
-      tile.x,
-      tile.y,
-    ]);
+  const receiveAttack = function (coordinate) {
+    const attackStatus = playerBoard.gameBoard.receiveAttack(coordinate);
+    const targetedTile = interElement(
+      document.querySelector(`#${name}-${coordinate[0]}.${coordinate[1]}`),
+    );
 
-    if (hit) {
-      tile.hit();
-    } else {
-      tile.miss();
-    }
+    if (attackStatus === true) targetedTile.hit();
+    if (attackStatus === false) targetedTile.miss();
+  };
 
-    gameState.switchPlayer();
-  }
+  return { receiveAttack, board: playerDomBoard };
 };
 
 const createDriver = function () {
   const gameArea = document.getElementById("game-area");
 
-  const startGame = function () {
-    console.log("Starting Game!");
+  const initGame = function () {
+    console.log("Initializing Game!");
 
     const names = getPlayerNames();
 
     const gridSize = gameState.gridSize;
 
-    const playerGrids = createGrids({
-      playerOneName: names.playerOne,
-      playerTwoName: names.playerTwo,
-      gridSize,
-      tileClickCallback: tileClick,
-    });
+    gameState.playerOne = createPlayerLink(names.playerOne, gridSize);
+    gameState.playerTwo = createPlayerLink(names.playerTwo, gridSize);
 
-    playerGrids.grids.forEach((gridElement) =>
-      gameArea.appendChild(gridElement),
+    domElements.gameBoard.append(
+      gameState.playerOne.board,
+      gameState.playerTwo.board,
     );
+    domElements.gameBoard.show();
+    domElements.startForm.hide();
+  };
+
+  const startGame = function () {
+    console.log("Starting Game!");
 
     gameState.playerOne = createPlayer(names.playerOne);
     gameState.playerTwo = createPlayer(names.playerTwo, true);
@@ -96,12 +93,12 @@ const createDriver = function () {
     domElements.startForm.hide();
     domElements.gameBoard.show();
 
-    domElements.playerOneBoard = newInterElement(playerGrids.grids[0]);
-    domElements.playerTwoBoard = newInterElement(playerGrids.grids[1]);
+    domElements.playerOneBoard = interElement(playerGrids.grids[0]);
+    domElements.playerTwoBoard = interElement(playerGrids.grids[1]);
     domElements.playerTwoBoard.toggleOutline();
   };
 
-  return { activeGame: false, startGame };
+  return { activeGame: false, initGame, startGame };
 };
 
 const driver = createDriver();
@@ -109,5 +106,5 @@ const driver = createDriver();
 const startButton = document.querySelector("#start-game");
 
 startButton.addEventListener("click", () => {
-  if (driver.activeGame === false) driver.startGame();
+  if (driver.activeGame === false) driver.initGame();
 });

@@ -21,6 +21,12 @@ export default {
       element.classList.remove("hidden");
     };
 
+    const append = function (...args) {
+      args.forEach((elem) => {
+        element.appendChild(elem);
+      });
+    };
+
     const update = function () {
       element = document.getElementById(element.id);
     };
@@ -37,6 +43,26 @@ export default {
       }
     };
 
-    return { hide, show, update, getValue, toggleOutline };
+    const hit = function () {
+      element.classList.remove("bg-blue-500");
+      element.classList.add("bg-red-500");
+    };
+
+    const miss = function () {
+      element.classList.remove("bg-blue-500");
+      element.classList.add("bg-zinc-400");
+    };
+
+    return {
+      element,
+      hide,
+      show,
+      append,
+      update,
+      getValue,
+      toggleOutline,
+      hit,
+      miss,
+    };
   },
 };

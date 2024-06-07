@@ -22,4 +22,4 @@ const createPlayer = function (name, isComputer = false) {
   return { name, isComputer, gameBoard };
 };
 
-export { createPlayer };
+export default createPlayer;
