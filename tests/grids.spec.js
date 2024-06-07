@@ -1,78 +1,49 @@
-import { createGrids } from "../src/components/grids.js";
+import createGrid from "../src/components/grids.js";
 
-test("returns an array containing two dom objects", () => {
-  expect(Array.isArray(createGrids().grids)).toBe(true);
-  expect(createGrids().grids.length === 2).toBe(true);
-  expect(createGrids().grids[0] instanceof Element).toBe(true);
-  expect(createGrids().grids[1] instanceof Element).toBe(true);
+it("returns an element", () => {
+  expect(createGrid() instanceof Element).toBe(true);
 });
 
-test("grids have default names as ID's if not defined", () => {
-  expect(createGrids().grids[0].id).not.toBe("");
-  expect(createGrids().grids[1].id).not.toBe("");
-});
+it("only accepts string for name", () => {
+  const invalidCases = [1, {}, [], null];
 
-test("grids accepts name change", () => {
-  const testCases = [["1", "2"], ["1"], [, "2"]];
-
-  testCases.forEach((testCase) => {
-    const answerOne = testCase[0] === undefined ? "Player1" : testCase[0];
-    const answerTwo = testCase[1] === undefined ? "Player2" : testCase[1];
-    const gridElement = createGrids({
-      playerOneName: answerOne,
-      playerTwoName: answerTwo,
-    });
-    expect(gridElement.grids[0].id).toBe(answerOne);
-    expect(gridElement.grids[1].id).toBe(answerTwo);
+  invalidCases.forEach((invalidCase) => {
+    expect(() => createGrid({ name: invalidCase })).toThrow(
+      "InputError: Name must be a string",
+    );
   });
 });
 
-test("grids have x rows of x columns", () => {
+it("assigns default name to id [defaultName]-grid", () => {
+  expect(createGrid().id.split("-")[0]).not.toBe("");
+});
+
+it("accepts input name to id: [name]-grid", () => {
+  const inputName = "testName";
+  expect(createGrid({ name: inputName }).id).toBe(inputName + "-grid");
+});
+
+it("creates a grid with [x] rows with [x] tiles", () => {
   const proposedGridSize = 5;
 
-  for (let i = 0; i < 2; i++) {
-    expect(
-      createGrids({ gridSize: proposedGridSize }).grids[i].childElementCount ===
-        proposedGridSize,
-    ).toBe(true);
-    expect(
-      createGrids({ gridSize: proposedGridSize }).grids[i].childNodes[0]
-        .childElementCount === proposedGridSize,
-    ).toBe(true);
-  }
+  expect(
+    createGrid({ gridSize: proposedGridSize }).childElementCount ===
+      proposedGridSize,
+  ).toBe(true);
+  expect(
+    createGrid({ gridSize: proposedGridSize }).firstChild.childElementCount ===
+      proposedGridSize,
+  ).toBe(true);
 });
 
-test("grids default to 10 rows by 10 columns", () => {
-  for (let i = 0; i < 2; i++) {
-    expect(createGrids().grids[i].childElementCount === 10).toBe(true);
-    expect(createGrids().grids[i].childNodes[0].childElementCount === 10).toBe(
-      true,
-    );
-  }
+it("defaults to 10 rows with 10 tiles", () => {
+  expect(createGrid().childElementCount === 10).toBe(true);
+  expect(createGrid().firstChild.childElementCount === 10).toBe(true);
 });
 
-test("grid tiles contain coordinates as id, format [name]-[x].[y]", () => {
-  const playerOneName = "Player1";
-  const gridElement = createGrids({
-    playerOneName,
-  });
-  const testCases = [
-    [1, 1],
-    [5, 3],
-    [7, 2],
-  ];
-
-  testCases.forEach((testCase) => {
-    expect(
-      gridElement.grids[0].childNodes[`${testCase[0]}`].childNodes[
-        `${testCase[1]}`
-      ].id,
-    ).toBe(
-      playerOneName +
-        "-" +
-        testCase[0].toString() +
-        "." +
-        testCase[1].toString(),
-    );
-  });
+it("contains a grid with rows with tiles that contain coordinates as id, format [name]-[x].[y]", () => {
+  const name = "Player";
+  const gridElement = createGrid({ name });
+  const gridTile = gridElement.firstChild.firstChild;
+  expect(gridTile.id).toBe("Player-0.0");
 });
