@@ -3,6 +3,7 @@ import { createShip } from "../modules/ship.js";
 const tile = function () {
   return {
     occupant: null,
+    isVisited: false,
   };
 };
 

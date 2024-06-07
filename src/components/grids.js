@@ -4,16 +4,7 @@ const createGrids = function ({
   gridSize = 10,
   tileClickCallback = (x) => console.log(x),
 } = {}) {
-  const playerOne =
-    playerOneName === undefined || playerOneName === ""
-      ? "Player1"
-      : playerOneName;
-  const playerTwo =
-    playerTwoName === undefined || playerTwoName === ""
-      ? "Player2"
-      : playerTwoName;
-
-  const grids = [playerOne, playerTwo].map((name) => {
+  const grids = [playerOneName, playerTwoName].map((name) => {
     const grid = document.createElement("div");
     grid.id = name;
     grid.classList = "flex flex-col aspect-square bg-blue-500";
@@ -28,7 +19,7 @@ const createGrids = function ({
         tile.classList =
           "flex-auto border border-black bg-blue-500 hover:cursor-pointer transition duration-250 linear active:scale-110";
 
-        tile.addEventListener("click", () =>
+        tile.addEventListener("click", (event) => {
           tileClickCallback({
             name,
             x,
@@ -41,8 +32,9 @@ const createGrids = function ({
               tile.classList.remove("bg-blue-500");
               tile.classList.add("bg-zinc-400");
             },
-          }),
-        );
+          });
+        });
+
         row.appendChild(tile);
       }
 

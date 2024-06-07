@@ -28,15 +28,34 @@ const domElements = {
   playerTwoBoard: undefined,
 };
 
+const getPlayerNames = function () {
+  const playerOneName = domElements.playerOneInput.getValue();
+  const playerTwoName = domElements.playerTwoInput.getValue();
+
+  const playerOne =
+    playerOneName === undefined || playerOneName === ""
+      ? "Player1"
+      : playerOneName;
+  const playerTwo =
+    playerTwoName === undefined || playerTwoName === ""
+      ? "Player2"
+      : playerTwoName;
+
+  return { playerOne, playerTwo };
+};
+
 const tileClick = function (tile) {
-  console.log(gameState);
-  if (tile.name === gameState.notCurrentPlayer.name) {
+  const targetTile = gameState.currentPlayer.gameBoard.board[tile.x][tile.y];
+  if (
+    tile.name === gameState.notCurrentPlayer.name &&
+    targetTile.isVisited === false
+  ) {
+    targetTile.isVisited = true;
+
     const hit = gameState.notCurrentPlayer.gameBoard.receiveAttack([
       tile.x,
       tile.y,
     ]);
-
-    console.log(hit);
 
     if (hit) {
       tile.hit();
@@ -54,25 +73,23 @@ const createDriver = function () {
   const startGame = function () {
     console.log("Starting Game!");
 
-    const playerOneName = domElements.playerOneInput.getValue();
-    const playerTwoName = domElements.playerTwoInput.getValue();
+    const names = getPlayerNames();
+
     const gridSize = gameState.gridSize;
-    const tileClickCallback = (input) => console.log(input);
+
     const playerGrids = createGrids({
-      playerOneName,
-      playerTwoName,
+      playerOneName: names.playerOne,
+      playerTwoName: names.playerTwo,
       gridSize,
       tileClickCallback: tileClick,
     });
-    const elemPlayerOneName = playerGrids.grids[0].id;
-    const elemPlayerTwoName = playerGrids.grids[1].id;
 
     playerGrids.grids.forEach((gridElement) =>
       gameArea.appendChild(gridElement),
     );
 
-    gameState.playerOne = createPlayer(elemPlayerOneName);
-    gameState.playerTwo = createPlayer(elemPlayerTwoName, true);
+    gameState.playerOne = createPlayer(names.playerOne);
+    gameState.playerTwo = createPlayer(names.playerTwo, true);
     gameState.currentPlayer = gameState.playerOne;
     gameState.notCurrentPlayer = gameState.playerTwo;
 
