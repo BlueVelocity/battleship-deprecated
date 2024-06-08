@@ -1,6 +1,4 @@
 import "./style.css";
-import "./modules/driver.js";
-import domHelper from "./modules/domHelper.js";
 
 const body = document.querySelector("body");
 

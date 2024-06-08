@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/dist/main.css" rel="stylesheet" />
-    <title>Document</title>
+    <title>BattleShip</title>
   </head>
   <body class="flex w-screen flex-col items-center justify-center h-content">
     <div class="top-0 flex h-11 w-full items-center justify-center bg-red-500 text-center">
@@ -14,14 +14,10 @@
     </div>
     <form id="start-form" class="flex flex-col gap-1 m-1">
       <div>
-        <label for="input-player-1">P1 Name:</label> 
+        <label for="input-player-1">Name:</label> 
         <input type="text" id="input-player-1" class="min-w-4">
       </div>
-      <div>
-        <label for="input-player-2">P2 Name:</label> 
-        <input type="text" id="input-player-2"class="min-w-4">
-      </div>
-      <button type="button" id="start-game" class="bg-slate-500 border border-black border-solid px-2 py-0.5 active:bg-blue-500" >Start Game!</button>
+      <button type="button" id="init-game" class="bg-slate-500 border border-black border-solid px-2 py-0.5 active:bg-blue-500" >Initialize Game</button>
     </form>
     <!-- content -->
   </body>
