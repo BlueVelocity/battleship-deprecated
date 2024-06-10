@@ -33,3 +33,7 @@ it("throws error if type is invalid", () => {
     );
   });
 });
+
+it("contains a board", () => {
+  expect(player.board).toBeDefined();
+});
