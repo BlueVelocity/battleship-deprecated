@@ -22,7 +22,7 @@ const createBoard = () => {
     if (orientation === 1) {
       const yCoords = [];
       for (let i = 0; i < length; i++) {
-        if (y + i > 9) return false;
+        if (y + i > 9 || model[x][y] !== null) return false;
         yCoords.push(y + i);
       }
 
@@ -32,32 +32,12 @@ const createBoard = () => {
       const xCoords = [];
 
       for (let i = 0; i < length; i++) {
-        if (x + i > 9) return false;
+        if (x + i > 9 || model[x][y] !== null) return false;
         xCoords.push(x + i);
       }
 
       ships.push(ship);
-      xCoords.forEach((x) => (model[x][x] = ship));
-    } else if (orientation === 3) {
-      const yCoords = [];
-
-      for (let i = 0; i < length; i++) {
-        if (y - i < 0) return false;
-        yCoords.push(y - i);
-      }
-
-      ships.push(ship);
-      yCoords.forEach((y) => (model[x][y] = ship));
-    } else if (orientation === 4) {
-      const xCoords = [];
-
-      for (let i = 0; i < length; i++) {
-        if (x - i < 0) return false;
-        xCoords.push(x - i);
-      }
-
-      ships.push(ship);
-      xCoords.forEach((x) => (model[x][x] = ship));
+      xCoords.forEach((x) => (model[x][y] = ship));
     }
 
     return true;
@@ -74,7 +54,28 @@ const createBoard = () => {
     return ships.every((ship) => ship.isSunk());
   };
 
-  return { model, place, receiveAttack, allSunk };
+  const randomizeShips = () => {
+    const randomNumber = (min, max) => {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    const shipLengths = [2, 3, 3, 4, 5];
+
+    shipLengths.forEach((length) => {
+      let cont = true;
+      let count = 0;
+      while (cont === true && count < 1000) {
+        const x = randomNumber(0, 9);
+        const y = randomNumber(0, 9);
+        const orientation = randomNumber(1, 2);
+
+        if (place(length, [x, y], orientation) === true) cont = false;
+        count++;
+      }
+    });
+  };
+
+  return { model, place, receiveAttack, allSunk, randomizeShips };
 };
 
 export { createBoard };
