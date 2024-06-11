@@ -10,15 +10,14 @@
     <div class="top-0 flex h-11 w-full items-center justify-center bg-red-500 text-center">
       <h1 class="flex-auto text-xl italic">BATTLESHIP</h1>
     </div>
-    <div id="game-area" class="grid grid-cols-[repeat(auto-fit,minmax(13rem,1fr))] grid-rows-1 gap-10 m-10 w-3/4 hidden"></div>
+    <div id="game-area" class="grid grid-cols-[repeat(auto-fit,minmax(13rem,1fr))] grid-rows-1 gap-10 m-10 w-3/4"></div>
     </div>
-    <form id="start-form" class="flex flex-col gap-1 m-1">
+    <form id="init-form" class="flex flex-col gap-1 m-1">
       <div>
-        <label for="input-player-1">Name:</label> 
-        <input type="text" id="input-player-1" class="min-w-4">
+        <label for="p1-name">P1 Name:</label> 
+        <input type="text" id="p1-name" class="min-w-4">
       </div>
       <button type="button" id="init-game" class="bg-slate-500 border border-black border-solid px-2 py-0.5 active:bg-blue-500" >Initialize Game</button>
     </form>
-    <!-- content -->
   </body>
 </html>

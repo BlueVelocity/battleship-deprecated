@@ -12,6 +12,32 @@ const generateGrid = () => {
   return grid;
 };
 
+const shipPlacement = (length, [x, y] = [], orientation) => {
+  const coords = [];
+
+  if (orientation === 1) {
+    for (let i = 0; i < length; i++) {
+      if (y + i > 9) {
+        coords = shipPlacement(length, [x, 9 - length], orientation);
+        break;
+      } else {
+        coords.push([x, y + i]);
+      }
+    }
+  } else if (orientation === 2) {
+    for (let i = 0; i < length; i++) {
+      if (x + i > 9) {
+        coords = shipPlacement(length, [9 - length, y], orientation);
+        break;
+      } else {
+        coords.push([x + i, y]);
+      }
+    }
+  }
+
+  return coords;
+};
+
 const createBoard = () => {
   const model = generateGrid();
   const ships = [];
@@ -47,6 +73,9 @@ const createBoard = () => {
     const targetTile = model[x][y];
     if (targetTile !== null) {
       targetTile.hit();
+      hits.push([x, y]);
+    } else {
+      misses.push([x, y]);
     }
   };
 
@@ -63,14 +92,12 @@ const createBoard = () => {
 
     shipLengths.forEach((length) => {
       let cont = true;
-      let count = 0;
-      while (cont === true && count < 1000) {
+      while (cont) {
         const x = randomNumber(0, 9);
         const y = randomNumber(0, 9);
         const orientation = randomNumber(1, 2);
 
-        if (place(length, [x, y], orientation) === true) cont = false;
-        count++;
+        if (place(length, [x, y], orientation)) cont = false;
       }
     });
   };
